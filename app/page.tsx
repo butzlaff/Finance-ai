@@ -7,6 +7,8 @@ export default function Home() {
 
   if (!userId) {
     redirect("/login");
+  } else if (userId) {
+    redirect("/transactions");
   }
 
   return (
