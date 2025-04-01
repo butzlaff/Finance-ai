@@ -26,7 +26,7 @@ const TransactionsPage = async () => {
       <div className="space-y-6 p-6">
         <div className="itens-center flex w-full justify-between">
           <h2 className="text-2xl font-bold">Transações</h2>
-          <Button className="rounded-full">
+          <Button className="rounded-full font-bold">
             Adicionar Transação
             <ArrowDownUpIcon />
           </Button>
