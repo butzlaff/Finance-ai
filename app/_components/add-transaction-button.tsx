@@ -42,6 +42,7 @@ import {
   TRANSACTION_PAYMENT_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
 } from "./_types/type_transaction";
+import { DatePicker } from "./data-picker";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -64,8 +65,10 @@ const formSchema = z.object({
   }),
 });
 
+type FormSchema = z.infer<typeof formSchema>;
+
 const AddTransactionButton = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -77,7 +80,7 @@ const AddTransactionButton = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: FormSchema) {
     console.log(values);
   }
 
@@ -213,12 +216,10 @@ const AddTransactionButton = () => {
             <FormField
               control={form.control}
               name="date"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Data</FormLabel>
-                  <FormControl>
-                    <Input type="date" />
-                  </FormControl>
+                  <DatePicker value={field.value} onChange={field.onChange} />
                   <FormMessage />
                 </FormItem>
               )}
