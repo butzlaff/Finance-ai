@@ -43,12 +43,13 @@ import {
   TRANSACTION_TYPE_OPTIONS,
 } from "./_types/type_transaction";
 import { DatePicker } from "./data-picker";
+import { addTransaction } from "../_actions/add-transaction";
 
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Nome é obrigatório",
   }),
-  ammount: z.string().min(1, {
+  amount: z.number().min(0, {
     message: "Valor é obrigatório",
   }),
   type: z.nativeEnum(TransactionType, {
@@ -72,7 +73,7 @@ const AddTransactionButton = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      ammount: "",
+      amount: 0,
       type: TransactionType.EXPENSE,
       category: TransactionCategory.EDUCATION,
       paymentMethod: TransactionPaymentMethod.CREDIT_CARD,
@@ -80,9 +81,19 @@ const AddTransactionButton = () => {
     },
   });
 
-  function onSubmit(values: FormSchema) {
-    console.log(values);
-  }
+  const onSubmit = async (values: FormSchema) => {
+    try {
+      const parsedValues = {
+        ...values,
+        date: new Date(values.date),
+      };
+
+      await addTransaction(parsedValues);
+      form.reset();
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
+  };
 
   return (
     <Dialog
@@ -120,12 +131,20 @@ const AddTransactionButton = () => {
             />
             <FormField
               control={form.control}
-              name="ammount"
+              name="amount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
-                    <MoneyInput placeholder="Digite o valor" {...field} />
+                    <MoneyInput
+                      placeholder="Digite o valor"
+                      value={field.value}
+                      onValueChange={({ floatValue }) =>
+                        field.onChange(floatValue)
+                      }
+                      onBlur={field.onBlur}
+                      disabled={field.disabled}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
