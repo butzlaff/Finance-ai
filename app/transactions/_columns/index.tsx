@@ -3,6 +3,9 @@
 import { Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TypeBadge from "./_components/type-badge";
+import { Button } from "@/app/_components/ui/button";
+import { TrashIcon } from "lucide-react";
+import EditTransactionButton from "./_components/edit-transaction-button";
 
 export const TRANSACTION_CATEGORY_LABELS = {
   EDUCATION: "Educação",
@@ -75,22 +78,10 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: "",
     cell: ({ row: { original: transaction } }) => (
       <div className="flex items-center gap-2">
-        <button
-          className="text-primary hover:text-primary/80"
-          onClick={() => {
-            console.log("Edit transaction", transaction);
-          }}
-        >
-          Editar
-        </button>
-        <button
-          className="text-danger hover:text-danger/80"
-          onClick={() => {
-            console.log("Delete transaction", transaction);
-          }}
-        >
-          Excluir
-        </button>
+        <EditTransactionButton transaction={transaction} />
+        <Button variant={"ghost"} size="icon" className="text-muted-foreground">
+          <TrashIcon />
+        </Button>
       </div>
     ),
   },
