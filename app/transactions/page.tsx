@@ -8,7 +8,7 @@ import { transactionColumns } from "./_columns";
 import AddTransactionButton from "../_components/add-transaction-button";
 
 const TransactionsPage = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   const transactions = await db.transaction.findMany({
     where: {
