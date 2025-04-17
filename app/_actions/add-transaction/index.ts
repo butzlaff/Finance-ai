@@ -23,7 +23,7 @@ interface UpsertTransactionProps {
 export const upsertTransaction = async (params: UpsertTransactionProps) => {
   upsertTransactionSchema.parse(params);
 
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("User not authenticated");
